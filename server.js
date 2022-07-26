@@ -34,4 +34,4 @@ app.use("/api", router)
 // router.use('/users', userRouter)
 
 
-app.listen(PORT, () => console.log("server is alive"))
+app.listen(PORT, () => console.log("server is alive with port: " + PORT))
