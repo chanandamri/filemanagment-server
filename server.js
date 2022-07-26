@@ -1,6 +1,8 @@
 const express = require("express")
 const fs = require('fs')
 const router = require('./router')
+const dotenv = require('dotenv')
+const PORT = process.env.PORT || 3001
 
 
 app = express()
@@ -32,4 +34,4 @@ app.use("/api", router)
 // router.use('/users', userRouter)
 
 
-app.listen(3001, () => console.log("server is alive"))
+app.listen(PORT, () => console.log("server is alive"))
