@@ -36,10 +36,15 @@ function isValidExtension(fileName) {
     let ext = fileName.slice(fileName.lastIndexOf("."))
     return ["txt", "json", "pdf"].find(char => ext == char) ? true : false
 }
-function saveFile(file) {
-    fs.writeFileSync('upload/' + file.originalname, file.buffer)
+function saveFile(file, folderParent) {
+    const adjParent = folderParent.replaceAll("***", "/")
+    fs.writeFileSync(adjParent + "/" + file.originalname, file.buffer)
 }
 
-module.exports = { createFile, updateFile, deleteFile, isValid, saveFile }
+function getAllFiles(folderParent) {
+    const adjParent = folderParent.replaceAll("***", "/")
+    const files = fs.readdirSync(adjParent, { withFileTypes: true }).filter((item) => item.isFile()).map(item => item.name)
+    return files
+}
 
-//comment
+module.exports = { createFile, updateFile, deleteFile, isValid, saveFile, getAllFiles }

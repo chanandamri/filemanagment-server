@@ -4,10 +4,11 @@ upload = multer()
 const express = require('express'),
     router = express.Router()
 
-router.get('/all/:folder', (req, res) => {
+//change to *? and there is no need to change ***
+router.get('/all/:folder*?', (req, res) => {
+    const folderParent = req.params.folder + req.params[0]
+    console.log("this is the folders: " + Object.prototype.toString.call(req.params));
     try {
-        console.log(req.params.folder);
-        const folderParent = req.params.folder
         console.log(folderParent);
         folders = folderLogic.folderList(folderParent)
         console.log(folders);
@@ -29,9 +30,9 @@ router.post('/create', (req, res) => {
 })
 
 router.post('/delete', (req, res) => {
-    const { folderName, folderParent } = req.body
-    console.log("req", req.body);
     try {
+        const { folderName, folderParent } = req.body
+        console.log("req", req.body);
         res.send(folderLogic.deleteFolder(folderName, folderParent))
     } catch (error) {
         res.send(error)
@@ -39,9 +40,9 @@ router.post('/delete', (req, res) => {
 })
 
 router.post('/edit', (req, res) => {
-    const { folderName, folderParent, folderNewName } = req.body
-    console.log("req", req.body);
     try {
+        const { folderName, folderParent, folderNewName } = req.body
+        console.log("req", req.body);
         res.send(folderLogic.renameFolder(folderName, folderParent, folderNewName))
     } catch (error) {
         console.log(error);

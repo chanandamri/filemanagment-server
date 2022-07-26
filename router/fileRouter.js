@@ -16,13 +16,21 @@ const express = require('express'),
 //     }
 // })
 router.put('/updatefile', async (req, res) => { })
-router.get('/getfile', async (req, res) => { })
+router.get('/all/:folder*?', (req, res) => {
+    try {
+        const folderParent = req.params.folder + req.params[0]
+        res.send(fileLogic.getAllFiles(folderParent))
+
+    } catch (error) {
+        console.log(error);
+    }
+
+})
 router.delete('/deletefile', async (req, res) => { })
+
 router.post('/create', upload.single('fileName'), async (req, res) => {
     try {
-        console.log(req.file);
-        console.log(req.file.buffer);
-        fileLogic.saveFile(req.file)
+        fileLogic.saveFile(req.file, req.body.folderParent)
         res.send("ok")
     } catch (error) {
         console.log(error);
