@@ -1,19 +1,37 @@
-const fs = require("fs")
-if (!fs.existsSync("root"))
-    fs.mkdirSync("root")
+const express = require("express")
+const fs = require('fs')
+const router = require('./router')
+const dotenv = require('dotenv')
+const PORT = process.env.PORT || 3001
 
-fs.writeFileSync("root/name.txt", "my name is Avi")
-fs.appendFileSync("root/name.txt", "\n and you are not")
-const text = fs.readFileSync("root/name.txt", { encoding: "utf-8" })
-console.log(text);
-const files = fs.readdirSync("root")
-console.log(files);
-files.forEach(file => fs.unlinkSync(`root/${file}`))
-// fs.unlinkSync("root/name.txt")
-// fs.rmdirSync("root")
 
-fs.writeFileSync("root/log.json", JSON.stringify({ error: "some error" }))
-const x = require("./root/log.json")
-console.log(x);
+app = express()
+const multer = require('multer')
+upload = multer({ dest: "./upload/" })
 
-fs.renameSync("root/log.json", "root/LOG.json")
+app.use(express.json())
+app.use(require('cors')())
+
+app.use((req, res, next) => {
+    let logs = []
+    try {
+        if (fs.existsSync("root/logger.json")) {
+            logs = require("./root/logger.json")
+        }
+        logs.push({ url: req.originalUrl, date: Date.now() })
+        fs.writeFileSync("root/logger.json", JSON.stringify(logs))
+
+    } catch (error) {
+        console.log("something went wrong", error);
+    }
+
+
+    next()
+})
+
+app.use("/api", router)
+// app.get("/users", (req, res) => res.send("user"))
+// router.use('/users', userRouter)
+
+
+app.listen(PORT, () => console.log("server is alive with port: " + PORT))
