@@ -15,18 +15,36 @@ const express = require('express'),
 //         res.send(error)
 //     }
 // })
-router.put('/updatefile', async (req, res) => { })
-router.get('/all/:folder*?', (req, res) => {
+router.post('/edit', (req, res) => {
     try {
-        const folderParent = req.params.folder + req.params[0]
-        res.send(fileLogic.getAllFiles(folderParent))
-
+        const { folderName, folderParent, folderNewName } = req.body
+        console.log("req", req.body);
+        res.send(fileLogic.renameFile(folderName, folderParent, folderNewName))
     } catch (error) {
         console.log(error);
+        res.send(error)
+    }
+})
+// router.get('/all/:folder*?', (req, res) => {
+//     try {
+//         const folderParent = req.params.folder + req.params[0]
+//         res.send(fileLogic.getAllFiles(folderParent))
+
+//     } catch (error) {
+//         console.log(error);
+//     }
+
+// })
+router.post('/delete', async (req, res) => {
+    try {
+        const { folderName, folderParent } = req.body
+        console.log("req", req.body);
+        res.send(fileLogic.deleteFile(folderName, folderParent))
+    } catch (error) {
+        res.send(error)
     }
 
 })
-router.delete('/deletefile', async (req, res) => { })
 
 router.post('/create', upload.single('fileName'), async (req, res) => {
     try {

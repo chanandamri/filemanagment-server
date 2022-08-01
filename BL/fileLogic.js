@@ -7,17 +7,25 @@ const createFile = function (fileName, content) {
     return "file exists"
 }
 
-const updateFile = function (fileName, content) {
-    if (!fs.existsSync(`root/${fileName}.txt`))
+const renameFile = function (fileName, folderParent, fileNewName) {
+    if (!fs.existsSync(`${folderParent}/${fileName}`))
         return "No file with this name"
-    fs.appendFileSync(`root/${fileName}.txt`, content)
-    return "file updated"
+    if (!isValidName(fileNewName))
+        return "invalid name"
+    if (isExists(`${folderParent}/${fileNewName}`))
+        return "name already in user"
+    const type = fileName.slice(fileName.lastIndexOf(".") + 1)
+    console.log(type);
+    fs.renameSync(`./${folderParent}/${fileName}`, `./${folderParent}/${fileNewName}.${type}`)
+    return "folder changed name to:", fileNewName
 }
 
-const deleteFile = function (fileName) {
-    if (!isExists(fileName))
+const deleteFile = function (fileName, folderParent) {
+    console.log(`file to be deleted - ${folderParent}/${fileName}`);
+    if (!isExists(`${folderParent}/${fileName}`))
         throw { code: 475, message: "no file" }
-    fs.unlinkSync(`root/${fileName}`)
+    fs.unlinkSync(`${folderParent}/${fileName}`)
+    return "file deleted"
 }
 function isValid(req, res, next) {
     const { fileName } = req.body
@@ -27,10 +35,10 @@ function isValid(req, res, next) {
     res.status(450).json("blabla")
 }
 function isExists(fileName) {
-    return fs.existsSync(`./root${fileName}`)
+    return fs.existsSync(fileName)
 }
 function isValidName(fileName) {
-    return ["/", "\\", "*", ":", "|", "?", "<", ">", `"`].find(char => fileName.includes(char)) ? false : fs.existsSync(`./root${fileName}`)
+    return ["/", "\\", "*", ":", "|", "?", "<", ">", `"`].find(char => fileName.includes(char)) ? false : true
 }
 function isValidExtension(fileName) {
     let ext = fileName.slice(fileName.lastIndexOf("."))
@@ -47,4 +55,4 @@ function getAllFiles(folderParent) {
     return files
 }
 
-module.exports = { createFile, updateFile, deleteFile, isValid, saveFile, getAllFiles }
+module.exports = { createFile, renameFile, deleteFile, isValid, saveFile, getAllFiles }

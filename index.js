@@ -15,11 +15,11 @@ app.use(require('cors')())
 app.use((req, res, next) => {
     let logs = []
     try {
-        if (fs.existsSync("root/logger.json")) {
-            logs = require("./root/logger.json")
+        if (fs.existsSync("log/logger.json")) {
+            logs = require("./log/logger.json")
         }
         logs.push({ url: req.originalUrl, date: Date.now() })
-        fs.writeFileSync("root/logger.json", JSON.stringify(logs))
+        fs.writeFileSync("log/logger.json", JSON.stringify(logs))
 
     } catch (error) {
         console.log("something went wrong", error);

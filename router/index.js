@@ -9,12 +9,9 @@ router.use('/folders', folderRouter)
 router.use('/files', fileRouter)
 router.get('/all/:folder*?', (req, res) => {
     try {
-        console.log(req.params.folder);
-        console.log(req.params[0]);
         const folderParent = req.params.folder + req.params[0]
-        console.log("this is the parent folder: " + folderParent);
         allData = generalLogic.allList(folderParent)
-        console.log("this is all the data for " + folderParent + " :" + allData);
+        console.log("this is all the data for folder - " + folderParent + " :" + allData);
         res.send(allData);
     }
     catch (error) {

@@ -52,14 +52,13 @@ function deleteFolder(folderName, folderParent) {
 }
 function renameFolder(folderName, folderParent, folderNewName) {
     try {
-        const adjParent = folderParent.replaceAll("***", "/")
-        if (!isExists(folderName, adjParent))
+        if (!isExists(folderName, folderParent))
             return "folder not exists"
         if (!isValidName(folderNewName))
             return "invalid charecters"
-        if (isExists(folderNewName, adjParent))
+        if (isExists(folderNewName, folderParent))
             return "name already in user"
-        fs.renameSync(`./${adjParent}/${folderName}`, `./${adjParent}/${folderNewName}`)
+        fs.renameSync(`./${folderParent}/${folderName}`, `./${folderParent}/${folderNewName}`)
         return "folder changed name to:", folderNewName
     } catch (error) {
         console.log(error);
