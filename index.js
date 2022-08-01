@@ -30,8 +30,4 @@ app.use((req, res, next) => {
 })
 
 app.use("/api", router)
-// app.get("/users", (req, res) => res.send("user"))
-// router.use('/users', userRouter)
-
-
 app.listen(PORT, () => console.log("server is alive with port: " + PORT))
